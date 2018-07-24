@@ -7,4 +7,5 @@ if __name__ == "__main__":
     os.chdir(os.getcwd() + r"\FlapPyBird")
 
     # Start game
-    flappy.Emulator(lambda x,y,z: 0, lambda x: 0).main()
+    flappy.Emulator().runSingleGame(lambda x,y,z: 0, lambda x: 0)
+    flappy.Emulator().runSingleGame(lambda x, y, z: 0, lambda x: 0)

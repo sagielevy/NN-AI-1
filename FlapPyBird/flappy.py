@@ -7,9 +7,9 @@ from pygame.locals import *
 
 
 class Emulator(object):
-    def __init__(self, act, update_score):
-        self.act = act
-        self.update_score = update_score
+    def __init__(self,):  # act, update_score
+        self.act = None
+        self.update_score = None
         self.FPS = 60
         self.SCREENWIDTH  = 288
         self.SCREENHEIGHT = 512
@@ -56,8 +56,6 @@ class Emulator(object):
             'assets/sprites/pipe-red.png',
         )
 
-    def main(self):
-        # global SCREEN, FPSCLOCK
         pygame.init()
         self.FPSCLOCK = pygame.time.Clock()
         self.SCREEN = pygame.display.set_mode((self.SCREENWIDTH, self.SCREENHEIGHT))
@@ -90,49 +88,53 @@ class Emulator(object):
         else:
             soundExt = '.ogg'
 
-        self.SOUNDS['die']    = pygame.mixer.Sound('assets/audio/die' + soundExt)
-        self.SOUNDS['hit']    = pygame.mixer.Sound('assets/audio/hit' + soundExt)
-        self.SOUNDS['point']  = pygame.mixer.Sound('assets/audio/point' + soundExt)
+        self.SOUNDS['die'] = pygame.mixer.Sound('assets/audio/die' + soundExt)
+        self.SOUNDS['hit'] = pygame.mixer.Sound('assets/audio/hit' + soundExt)
+        self.SOUNDS['point'] = pygame.mixer.Sound('assets/audio/point' + soundExt)
         self.SOUNDS['swoosh'] = pygame.mixer.Sound('assets/audio/swoosh' + soundExt)
-        self.SOUNDS['wing']   = pygame.mixer.Sound('assets/audio/wing' + soundExt)
+        self.SOUNDS['wing'] = pygame.mixer.Sound('assets/audio/wing' + soundExt)
 
-        while True:
-            # select random background sprites
-            randBg = random.randint(0, len(self.BACKGROUNDS_LIST) - 1)
-            self.IMAGES['background'] = pygame.image.load(self.BACKGROUNDS_LIST[randBg]).convert()
+    def runSingleGame(self, act, update_score):
+        self.act = act
+        self.update_score = update_score
 
-            # select random player sprites
-            randPlayer = random.randint(0, len(self.PLAYERS_LIST) - 1)
-            self.IMAGES['player'] = (
-                pygame.image.load(self.PLAYERS_LIST[randPlayer][0]).convert_alpha(),
-                pygame.image.load(self.PLAYERS_LIST[randPlayer][1]).convert_alpha(),
-                pygame.image.load(self.PLAYERS_LIST[randPlayer][2]).convert_alpha(),
-            )
+        # while True:
+        # select random background sprites
+        randBg = random.randint(0, len(self.BACKGROUNDS_LIST) - 1)
+        self.IMAGES['background'] = pygame.image.load(self.BACKGROUNDS_LIST[randBg]).convert()
 
-            # select random pipe sprites
-            pipeindex = random.randint(0, len(self.PIPES_LIST) - 1)
-            self.IMAGES['pipe'] = (
-                pygame.transform.rotate(
-                    pygame.image.load(self.PIPES_LIST[pipeindex]).convert_alpha(), 180),
-                pygame.image.load(self.PIPES_LIST[pipeindex]).convert_alpha(),
-            )
+        # select random player sprites
+        randPlayer = random.randint(0, len(self.PLAYERS_LIST) - 1)
+        self.IMAGES['player'] = (
+            pygame.image.load(self.PLAYERS_LIST[randPlayer][0]).convert_alpha(),
+            pygame.image.load(self.PLAYERS_LIST[randPlayer][1]).convert_alpha(),
+            pygame.image.load(self.PLAYERS_LIST[randPlayer][2]).convert_alpha(),
+        )
 
-            # hismask for pipes
-            self.HITMASKS['pipe'] = (
-                self.getHitmask(self.IMAGES['pipe'][0]),
-                self.getHitmask(self.IMAGES['pipe'][1]),
-            )
+        # select random pipe sprites
+        pipeindex = random.randint(0, len(self.PIPES_LIST) - 1)
+        self.IMAGES['pipe'] = (
+            pygame.transform.rotate(
+                pygame.image.load(self.PIPES_LIST[pipeindex]).convert_alpha(), 180),
+            pygame.image.load(self.PIPES_LIST[pipeindex]).convert_alpha(),
+        )
 
-            # hitmask for player
-            self.HITMASKS['player'] = (
-                self.getHitmask(self.IMAGES['player'][0]),
-                self.getHitmask(self.IMAGES['player'][1]),
-                self.getHitmask(self.IMAGES['player'][2]),
-            )
+        # hismask for pipes
+        self.HITMASKS['pipe'] = (
+            self.getHitmask(self.IMAGES['pipe'][0]),
+            self.getHitmask(self.IMAGES['pipe'][1]),
+        )
 
-            movementInfo = self.showWelcomeAnimation()
-            crashInfo = self.mainGame(movementInfo)
-            self.showGameOverScreen(crashInfo)
+        # hitmask for player
+        self.HITMASKS['player'] = (
+            self.getHitmask(self.IMAGES['player'][0]),
+            self.getHitmask(self.IMAGES['player'][1]),
+            self.getHitmask(self.IMAGES['player'][2]),
+        )
+
+        movementInfo = self.showWelcomeAnimation()
+        crashInfo = self.mainGame(movementInfo)
+        self.showGameOverScreen(crashInfo)
 
     def showWelcomeAnimation(self):
         """Shows welcome screen animation of flappy bird"""
