@@ -1,9 +1,10 @@
 import keras
-import pygame
-import tensorflow
 import FlapPyBird.flappy as flappy
 import os
 
 if __name__ == "__main__":
+    # Change work dir for game to work
     os.chdir(os.getcwd() + r"\FlapPyBird")
-    flappy.main()
+
+    # Start game
+    flappy.Emulator(lambda x,y,z: 0, lambda x: 0).main()
