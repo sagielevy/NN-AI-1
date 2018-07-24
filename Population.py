@@ -12,3 +12,6 @@ class Population(object):
 
     def generate_next_generation(self):
         pass
+
+    def calculate_current_gen(self, emulator):
+        pass
